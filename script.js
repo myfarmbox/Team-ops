@@ -141,7 +141,7 @@ function renderButtons(buttons) {
 
   emptyState.classList.add("hidden");
 
-  buttons.forEach((btn) => {
+  buttons.forEach((btn, index) => {
     const meta = toolMeta(btn);
     const label = btn.label && btn.label !== btn.key ? btn.label : meta.label;
     const card = document.createElement("a");
@@ -149,6 +149,8 @@ function renderButtons(buttons) {
     card.className = "tool-card";
     card.target = "_blank";
     card.rel = "noopener";
+    card.style.setProperty("--delay", `${index * 70}ms`);
+    card.setAttribute("aria-label", label);
     card.innerHTML = `
       <div class="tool-icon ${meta.cls}">${meta.icon}</div>
       <div class="tool-copy">
