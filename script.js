@@ -7,7 +7,10 @@ let deferredPrompt = null;
 const TOOL_META = {
   Harvest: { label: "Harvest Generator", desc: "Weekly harvest flow & farm-wise lists", icon: "🌾", cls: "i-green" },
   WhatsApp: { label: "WhatsApp", desc: "Templates & customer updates", icon: "💬", cls: "i-teal" },
-  Orders: { label: "Order Consolidation", desc: "Combine orders into one clean list", icon: "📦", cls: "i-navy" },
+  Orders: { label: "Order Consolidation", desc: "Combine orders into one clean list", icon: "🧾", cls: "i-navy" },
+  Consolidation: { label: "Consolidation", desc: "Combine orders into one clean list", icon: "🧾", cls: "i-navy" },
+  "Orders - Consolidation": { label: "Orders - Consolidation", desc: "Combine orders into one clean list", icon: "🧾", cls: "i-navy" },
+  "Phone Orders": { label: "Phone Orders", desc: "Handle inbound phone-based orders", icon: "📞", cls: "i-earth" },
   Delivery: { label: "Delivery Console", desc: "Live delivery ops & tracking", icon: "🚚", cls: "i-gold" },
   Attendance: { label: "Attendance", desc: "Daily team attendance tracking", icon: "👨‍🌾", cls: "i-earth" },
   "MFB Members Data": { label: "MFB Members Data", desc: "Master member records and updates", icon: "👥", cls: "i-navy" },
