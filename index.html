@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyFarmBox Internal App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>MyFarmBox Internal App</h1>
+
+  <div id="login">
+    <input id="pin" type="password" placeholder="Enter PIN">
+    <button onclick="login()">Login</button>
+    <p id="status"></p>
+  </div>
+
+  <div id="apps" style="display:none">
+    <h2 id="user"></h2>
+
+    <a id="harvest" target="_blank" rel="noopener noreferrer">Harvest List</a>
+    <a id="whatsapp" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+    <a id="orders" target="_blank" rel="noopener noreferrer">Order Consolidation</a>
+    <a id="delivery" target="_blank" rel="noopener noreferrer">Delivery Console</a>
+    <a id="attendance" target="_blank" rel="noopener noreferrer">Attendance</a>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
