@@ -1,15 +1,18 @@
 const LOGIN_API = "https://script.google.com/macros/s/AKfycbxBI0SbhJVUAv0GM1OuhUN8vbcQVT-26uUPWbcjhIs1fRB-h6awdYZFwAQQSFibL4pKrg/exec";
 const SESSION_KEY = "mfb_internal_app_session";
 const SESSION_AGE_MS = 8 * 60 * 60 * 1000;
+const AUTO_PIN_LENGTH = 4;
 
 let deferredPrompt = null;
+let autoLoginTimer = null;
+let isLoggingIn = false;
 
 const TOOL_META = {
-  Harvest: { label: "Harvest Generator", desc: "Weekly harvest flow & farm-wise lists", icon: "🌾", cls: "i-green" },
-  WhatsApp: { label: "WhatsApp", desc: "Templates & customer updates", icon: "💬", cls: "i-teal" },
-  Orders: { label: "Order Consolidation", desc: "Combine orders into one clean list", icon: "📦", cls: "i-navy" },
-  Delivery: { label: "Delivery Console", desc: "Live delivery ops & tracking", icon: "🚚", cls: "i-gold" },
-  Attendance: { label: "Attendance", desc: "Daily team attendance tracking", icon: "👨‍🌾", cls: "i-earth" }
+  Harvest: { label: "Harvest", icon: "🌾", cls: "i-green" },
+  WhatsApp: { label: "WhatsApp", icon: "💬", cls: "i-teal" },
+  Orders: { label: "Orders", icon: "📦", cls: "i-navy" },
+  Delivery: { label: "Delivery", icon: "🚚", cls: "i-gold" },
+  Attendance: { label: "Attendance", icon: "👨‍🌾", cls: "i-earth" }
 };
 
 const bootLoader = document.getElementById("bootLoader");
@@ -30,15 +33,17 @@ const userName = document.getElementById("userName");
 const userRole = document.getElementById("userRole");
 const footerStatus = document.getElementById("footerStatus");
 const installBtn = document.getElementById("installBtn");
+const pinDots = Array.from(document.querySelectorAll(".pin-dot"));
+const keypadButtons = Array.from(document.querySelectorAll(".numpad-key[data-key]"));
 
-setTimeout(() => bootLoader.classList.add("hidden"), 1600);
+setTimeout(() => bootLoader.classList.add("hidden"), 900);
 
 function updateClock() {
   const now = new Date();
   document.getElementById("clock").textContent =
-    now.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    now.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
   document.getElementById("dateLine").textContent =
-    now.toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short" }).toUpperCase();
+    now.toLocaleDateString("en-IN", { day: "2-digit", month: "short" }).toUpperCase();
 }
 
 updateClock();
@@ -96,7 +101,6 @@ function clearSession() {
 function toolMeta(btn) {
   return TOOL_META[btn.key] || TOOL_META[btn.label] || {
     label: btn.label || "Tool",
-    desc: "Open linked application",
     icon: "↗",
     cls: "i-green"
   };
@@ -115,6 +119,42 @@ function ripple(el, evt) {
   setTimeout(() => node.remove(), 600);
 }
 
+function syncPinDots() {
+  const pin = pinInput.value.trim();
+  pinDots.forEach((dot, index) => {
+    dot.classList.toggle("filled", index < pin.length);
+    dot.classList.toggle("active", index === Math.min(pin.length, pinDots.length - 1) && pin.length < AUTO_PIN_LENGTH);
+  });
+}
+
+function clearAutoLoginTimer() {
+  if (!autoLoginTimer) return;
+  clearTimeout(autoLoginTimer);
+  autoLoginTimer = null;
+}
+
+function pulsePinError() {
+  loginCard.classList.remove("shake");
+  void loginCard.offsetWidth;
+  loginCard.classList.add("shake");
+}
+
+function queueAutoLogin() {
+  clearAutoLoginTimer();
+  if (isLoggingIn) return;
+  if (pinInput.value.trim().length < AUTO_PIN_LENGTH) return;
+  autoLoginTimer = setTimeout(() => {
+    handleLogin();
+  }, 320);
+}
+
+function setPinValue(nextValue) {
+  pinInput.value = nextValue.slice(0, 12);
+  setError("");
+  syncPinDots();
+  queueAutoLogin();
+}
+
 function bindTool(card, label, url) {
   card.addEventListener("click", (evt) => {
     evt.preventDefault();
@@ -127,8 +167,8 @@ function bindTool(card, label, url) {
       hideOverlay();
       footerStatus.textContent = "Tools ready";
       showToast(label + " opened", "success");
-      hideToast(1300);
-    }, 260);
+      hideToast(1200);
+    }, 220);
   });
 }
 
@@ -141,23 +181,19 @@ function renderButtons(buttons) {
 
   emptyState.classList.add("hidden");
 
-  buttons.forEach((btn, index) => {
+  buttons.forEach((btn) => {
     const meta = toolMeta(btn);
     const label = btn.label && btn.label !== btn.key ? btn.label : meta.label;
     const card = document.createElement("a");
     card.href = btn.url;
     card.className = "tool-card";
+    if (meta.cls) card.classList.add(meta.cls);
     card.target = "_blank";
     card.rel = "noopener";
-    card.style.setProperty("--delay", `${index * 70}ms`);
     card.setAttribute("aria-label", label);
     card.innerHTML = `
-      <div class="tool-icon ${meta.cls}">${meta.icon}</div>
-      <div class="tool-copy">
-        <div class="tool-title">${label}</div>
-        <div class="tool-desc">${btn.desc || meta.desc}</div>
-      </div>
-      <div class="tool-arrow">›</div>
+      <div class="tool-icon">${meta.icon}</div>
+      <div class="tool-title">${label}</div>
     `;
     bindTool(card, label, btn.url);
     toolsGrid.appendChild(card);
@@ -168,19 +204,40 @@ function showLoggedIn(user, buttons) {
   loginCard.classList.add("hidden");
   userCard.classList.remove("hidden");
   userName.textContent = user.name || "Team User";
-  userRole.textContent = user.role ? user.role + " access active" : "Role based tools loaded";
-  footerStatus.textContent = user.role ? user.role + " tools live" : "Secure session active";
+  userRole.textContent = user.role || "Access active";
+  footerStatus.textContent = "Secure session active";
   renderButtons(buttons || []);
 }
 
 function showLoggedOut() {
+  clearAutoLoginTimer();
   loginCard.classList.remove("hidden");
   userCard.classList.add("hidden");
   toolsGrid.innerHTML = "";
   emptyState.classList.add("hidden");
   footerStatus.textContent = "Awaiting secure login";
-  pinInput.value = "";
-  setError("");
+  setPinValue("");
+}
+
+function setLoggingState(active) {
+  isLoggingIn = active;
+  document.querySelectorAll(".numpad-key").forEach((button) => {
+    button.disabled = active;
+  });
+}
+
+function applyKey(value) {
+  if (isLoggingIn) return;
+  if (value === "clear") {
+    setPinValue("");
+    return;
+  }
+  if (value === "backspace") {
+    setPinValue(pinInput.value.slice(0, -1));
+    return;
+  }
+  if (!/^\d$/.test(value) || pinInput.value.length >= 12) return;
+  setPinValue(pinInput.value + value);
 }
 
 async function fetchLogin(pin) {
@@ -192,29 +249,33 @@ async function fetchLogin(pin) {
 
 async function handleLogin() {
   const pin = pinInput.value.trim();
-  if (!pin) {
-    setError("Enter PIN");
-    showToast("Enter PIN", "error");
-    hideToast();
-    pinInput.focus();
+  if (!pin || isLoggingIn) {
+    if (!pin) {
+      setError("Enter PIN");
+      showToast("Enter PIN", "error");
+      hideToast();
+      pulsePinError();
+    }
     return;
   }
 
+  clearAutoLoginTimer();
+  setLoggingState(true);
   setError("");
   showOverlay("Authenticating");
   showToast("Verifying PIN...");
 
   try {
-    showToast("Connecting...");
     const data = await fetchLogin(pin);
-    showToast("Reading access...");
 
     if (!data || !data.ok) {
       const message = data && data.error ? data.error : "Invalid PIN";
       setError(message);
       showToast(message, "error");
       hideOverlay();
-      hideToast(1800);
+      hideToast(1600);
+      pulsePinError();
+      setLoggingState(false);
       return;
     }
 
@@ -224,32 +285,62 @@ async function handleLogin() {
     };
 
     saveSession(payload);
-    showToast("Loading tools...");
     showLoggedIn(payload.user, payload.buttons);
     hideOverlay();
     showToast("Ready", "success");
     hideToast();
+    setLoggingState(false);
   } catch {
     setError("Unable to connect");
     hideOverlay();
     showToast("Unable to connect", "error");
-    hideToast(1800);
+    hideToast(1600);
+    pulsePinError();
+    setLoggingState(false);
   }
 }
 
-loginBtn.addEventListener("click", handleLogin);
-clearBtn.addEventListener("click", () => {
-  pinInput.value = "";
-  setError("");
-  pinInput.focus();
+loginBtn.addEventListener("click", () => {
+  clearAutoLoginTimer();
+  handleLogin();
 });
+
+clearBtn.addEventListener("click", () => {
+  applyKey("clear");
+});
+
 logoutBtn.addEventListener("click", () => {
   clearSession();
   showLoggedOut();
 });
 
 pinInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") handleLogin();
+  if (event.key === "Enter") {
+    event.preventDefault();
+    clearAutoLoginTimer();
+    handleLogin();
+    return;
+  }
+  if (event.key === "Backspace") {
+    event.preventDefault();
+    applyKey("backspace");
+    return;
+  }
+  if (/^\d$/.test(event.key)) {
+    event.preventDefault();
+    applyKey(event.key);
+  }
+});
+
+pinInput.addEventListener("input", () => {
+  setPinValue(pinInput.value.replace(/\D/g, ""));
+});
+
+keypadButtons.forEach((button) => {
+  button.addEventListener("click", (event) => {
+    ripple(button, event);
+    applyKey(button.dataset.key);
+  });
 });
 
 document.querySelectorAll(".quick-btn").forEach((btn) => {
@@ -285,3 +376,5 @@ if (session && session.user) {
 } else {
   showLoggedOut();
 }
+
+syncPinDots();
