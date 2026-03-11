@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyFarmBox Ops</title>
+
+  <meta name="theme-color" content="#f5f5dc">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="MyFarmBox Ops">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="bootLoader" class="boot-loader">
+    <div class="boot-card">
+      <img src="logo.png" class="boot-logo" alt="MyFarmBox Logo" onerror="this.style.display='none'">
+    </div>
+  </div>
+
+  <div id="statusToast" class="status-toast">
+    <span class="status-dot"></span>
+    <span id="statusText">Loading...</span>
+  </div>
+
+  <div id="overlay" class="overlay">
+    <div class="overlay-card">
+      <div class="spinner"></div>
+      <div id="overlayLabel" class="overlay-label">Authenticating</div>
+    </div>
+  </div>
+
+  <main class="app-shell">
+    <header class="brand-header">
+      <img src="logo.png" alt="MyFarmBox Logo" class="brand-logo" onerror="this.style.display='none'">
+      <button id="installBtn" class="install-btn hidden" type="button">Install</button>
+    </header>
+
+    <section id="loginCard" class="login-card">
+      <input id="pinInput" class="pin-input" type="password" inputmode="numeric" autocomplete="one-time-code" maxlength="12" aria-label="PIN">
+
+      <div id="pinDots" class="pin-dots" aria-hidden="true">
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+      </div>
+
+      <div class="numpad" aria-label="PIN keypad">
+        <button class="numpad-key" type="button" data-key="1">1</button>
+        <button class="numpad-key" type="button" data-key="2">2</button>
+        <button class="numpad-key" type="button" data-key="3">3</button>
+        <button class="numpad-key" type="button" data-key="4">4</button>
+        <button class="numpad-key" type="button" data-key="5">5</button>
+        <button class="numpad-key" type="button" data-key="6">6</button>
+        <button class="numpad-key" type="button" data-key="7">7</button>
+        <button class="numpad-key" type="button" data-key="8">8</button>
+        <button class="numpad-key" type="button" data-key="9">9</button>
+        <button id="clearBtn" class="numpad-key numpad-key-muted" type="button">Clear</button>
+        <button class="numpad-key" type="button" data-key="0">0</button>
+        <button id="loginBtn" class="numpad-key numpad-key-accent" type="button">Go</button>
+      </div>
+
+      <div id="errorText" class="error-text"></div>
+    </section>
+
+    <section id="userCard" class="user-card hidden">
+      <div class="user-meta">
+        <div id="userName" class="user-name">-</div>
+        <div id="userRole" class="user-role">Role based tools loaded</div>
+      </div>
+      <button id="logoutBtn" class="logout-btn" type="button">Logout</button>
+    </section>
+
+    <section id="emptyState" class="empty-state hidden">
+      No tools available
+    </section>
+
+    <section id="toolsGrid" class="tools-grid"></section>
+
+    <footer class="footer">
+      <div class="footer-actions">
+        <a class="footer-btn quick-btn" href="tel:7448444681">Call Admin</a>
+        <a class="footer-btn quick-btn" href="mailto:ajeeth@myfarmbox.in?subject=MyFarmBox%20Ops">Email</a>
+      </div>
+      <div class="footer-meta">
+        <span id="clock" class="clock">-</span>
+        <span id="dateLine" class="date-line">-</span>
+        <span id="footerStatus" class="footer-status">Awaiting secure login</span>
+      </div>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
