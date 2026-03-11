@@ -1,29 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MyFarmBox Internal App</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyFarmBox Ops</title>
+
+  <meta name="theme-color" content="#0b140b" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="MyFarmBox Ops" />
+
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>MyFarmBox Internal App</h1>
-
-  <div id="login">
-    <input id="pin" type="password" placeholder="Enter PIN">
-    <button onclick="login()">Login</button>
-    <p id="status"></p>
+  <div id="bootLoader" class="boot-loader">
+    <div class="boot-card">
+      <img src="logo.png" class="boot-logo" alt="MyFarmBox Logo" onerror="this.style.display='none'">
+      <div class="boot-title">MyFarmBox</div>
+      <div class="boot-sub">Loading Internal App</div>
+      <div class="boot-line"><span></span></div>
+    </div>
   </div>
 
-  <div id="apps" style="display:none">
-    <h2 id="user"></h2>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <div class="ambient ambient-c"></div>
 
-    <a id="harvest" target="_blank" rel="noopener noreferrer">Harvest List</a>
-    <a id="whatsapp" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-    <a id="orders" target="_blank" rel="noopener noreferrer">Order Consolidation</a>
-    <a id="delivery" target="_blank" rel="noopener noreferrer">Delivery Console</a>
-    <a id="attendance" target="_blank" rel="noopener noreferrer">Attendance</a>
+  <div id="statusToast" class="status-toast">
+    <span class="status-dot"></span>
+    <span id="statusText">Loading...</span>
   </div>
+
+  <div id="overlay" class="overlay">
+    <div class="overlay-card">
+      <div class="spinner"></div>
+      <div id="overlayLabel" class="overlay-label">Authenticating</div>
+    </div>
+  </div>
+
+  <main class="app-shell">
+    <header class="hero">
+      <div class="brand-row">
+        <img src="logo.png" alt="MyFarmBox Logo" class="brand-logo" onerror="this.style.display='none'">
+        <div class="brand-copy">
+          <div class="brand-name">MyFarmBox</div>
+          <div class="brand-tag">Internal Operations</div>
+        </div>
+      </div>
+
+      <div class="hero-copy glass-card">
+        <div>
+          <h1>Team <em>Operations</em></h1>
+          <p>PIN-protected internal hub for daily workflows.</p>
+        </div>
+        <button id="installBtn" class="install-btn hidden" type="button">Install App</button>
+      </div>
+    </header>
+
+    <section id="loginCard" class="glass-card login-card">
+      <div class="card-top">
+        <div>
+          <h2>Security PIN</h2>
+          <p>Enter your access PIN to load your role-based tools.</p>
+        </div>
+        <div class="secure-pill">
+          <span class="live-dot"></span>
+          <span>Protected</span>
+        </div>
+      </div>
+
+      <div class="login-form">
+        <input id="pinInput" class="pin-input" type="password" inputmode="numeric" autocomplete="one-time-code" placeholder="Enter PIN" maxlength="12">
+        <button id="loginBtn" class="primary-btn" type="button">Unlock</button>
+        <button id="clearBtn" class="ghost-btn" type="button">Clear</button>
+      </div>
+
+      <div class="login-meta">
+        <div id="errorText" class="error-text"></div>
+        <div class="meta-note">Google Sheet based role access</div>
+      </div>
+    </section>
+
+    <section id="userCard" class="glass-card user-card hidden">
+      <div>
+        <div id="userName" class="user-name">—</div>
+        <div id="userRole" class="user-role">Role based tools loaded</div>
+      </div>
+      <button id="logoutBtn" class="logout-btn" type="button">Logout</button>
+    </section>
+
+    <section class="tools-head">
+      <div class="section-label">Apps &amp; Tools</div>
+    </section>
+
+    <section id="emptyState" class="glass-card empty-state hidden">
+      No tools are available for this login yet.
+    </section>
+
+    <section id="toolsGrid" class="tools-grid"></section>
+
+    <section class="quick-section">
+      <div class="section-label">Quick Contact</div>
+      <div class="quick-row">
+        <a class="quick-btn" href="tel:7448444681">
+          <span>📱</span>
+          <span>Call Admin</span>
+        </a>
+        <a class="quick-btn" href="mailto:ajeeth@myfarmbox.in?subject=MyFarmBox%20Ops">
+          <span>✉️</span>
+          <span>Email Ajeeth</span>
+        </a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div>
+        <div id="clock" class="clock">—</div>
+        <div id="dateLine" class="date-line">—</div>
+      </div>
+      <div class="footer-pill">
+        <span class="live-dot"></span>
+        <span id="footerStatus">Awaiting secure login</span>
+      </div>
+    </footer>
+  </main>
 
   <script src="script.js"></script>
 </body>
