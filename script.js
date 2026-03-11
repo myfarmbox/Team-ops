@@ -106,6 +106,38 @@ function toolMeta(btn) {
   };
 }
 
+function normalizeButtons(buttons) {
+  if (!Array.isArray(buttons)) return [];
+
+  return buttons
+    .map((btn) => {
+      const url = (
+        btn.url ||
+        btn.URL ||
+        btn.link ||
+        btn.Link ||
+        btn["App URL"] ||
+        btn["Button URL"] ||
+        ""
+      ).trim();
+
+      const label = (
+        btn.label ||
+        btn.name ||
+        btn.key ||
+        btn.buttonName ||
+        btn.ButtonName ||
+        btn["Button Name"] ||
+        btn["App Name"] ||
+        ""
+      ).trim();
+
+      if (!url || !label) return null;
+      return { ...btn, url, label };
+    })
+    .filter(Boolean);
+}
+
 function ripple(el, evt) {
   const rect = el.getBoundingClientRect();
   const node = document.createElement("span");
@@ -173,15 +205,16 @@ function bindTool(card, label, url) {
 }
 
 function renderButtons(buttons) {
+  const visibleButtons = normalizeButtons(buttons);
   toolsGrid.innerHTML = "";
-  if (!buttons || !buttons.length) {
+  if (!visibleButtons.length) {
     emptyState.classList.remove("hidden");
     return;
   }
 
   emptyState.classList.add("hidden");
 
-  buttons.forEach((btn) => {
+  visibleButtons.forEach((btn) => {
     const meta = toolMeta(btn);
     const label = btn.label && btn.label !== btn.key ? btn.label : meta.label;
     const card = document.createElement("a");
