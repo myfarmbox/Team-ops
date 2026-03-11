@@ -16,21 +16,8 @@ const TOOL_META = {
   "Phone Orders": { label: "Phone Orders", icon: "📞", cls: "i-earth" },
   Delivery: { label: "Delivery", icon: "🚚", cls: "i-gold" },
   Attendance: { label: "Attendance", icon: "👨‍🌾", cls: "i-earth" },
-  "Realtime Delivery Board": { label: "Realtime Delivery Board", icon: "🛰️", cls: "i-gold" },
   "MFB Members Data": { label: "MFB Members Data", icon: "👥", cls: "i-navy" },
   "MyFarmBox Master data": { label: "MyFarmBox Master data", icon: "👥", cls: "i-navy" }
-};
-
-const APP_URLS = {
-  Harvest: "https://script.google.com/macros/s/AKfycby5LYbrTs1YFPpXWztm7f6LINPEieHlHwm2QdcRPCIWVph2dghUuF3n19mxUukGcVYylg/exec",
-  WhatsApp: "https://script.google.com/macros/s/AKfycbyTvFFPB2TucM8vOfXgsvtoFwx5xXcwC7WhZKAkWIO1lnZe89uYOry8kjZrvSBVJTpTLA/exec",
-  Consolidation: "https://script.google.com/macros/s/AKfycbzkWAwGmERHFu_hvTaybGyJAmtEbBW51j-tm_h75s-FXELHzOrjlLDCc_-tHUVNgvz9/exec",
-  Delivery: "https://script.google.com/macros/s/AKfycbz2yba68hKHzxD7I2M_5IgNZn4FNbA2OGYrHfN8C-OaICH-g1E1nU4NWEb2lUGVpOPtsg/exec",
-  Attendance: "https://script.google.com/macros/s/AKfycbyknmnotUnNyXwJYYXzypivJelWH5OCN-xOuItppcruYLGLDNRNcCKb7F8dUYgnXP-16w/exec",
-  "MFB Members Data": "https://script.google.com/macros/s/AKfycbyXYBg7N2PsrGQqyQo85tHAbEDd1RQg8IzWFjClC9-skkg1LIS9ICeuLIouCIAKaJSX/exec",
-  Orders: "https://script.google.com/macros/s/AKfycbzkWAwGmERHFu_hvTaybGyJAmtEbBW51j-tm_h75s-FXELHzOrjlLDCc_-tHUVNgvz9/exec",
-  "Orders - Consolidation": "https://script.google.com/macros/s/AKfycbzkWAwGmERHFu_hvTaybGyJAmtEbBW51j-tm_h75s-FXELHzOrjlLDCc_-tHUVNgvz9/exec",
-  "MyFarmBox Master data": "https://script.google.com/macros/s/AKfycbyXYBg7N2PsrGQqyQo85tHAbEDd1RQg8IzWFjClC9-skkg1LIS9ICeuLIouCIAKaJSX/exec"
 };
 
 const bootLoader = document.getElementById("bootLoader");
@@ -129,19 +116,6 @@ function normalizeButtons(buttons) {
 
   return buttons
     .map((btn) => {
-      const key = (
-        btn.key ||
-        btn.label ||
-        btn.name ||
-        btn.button ||
-        btn.BUTTON ||
-        btn.buttonName ||
-        btn.ButtonName ||
-        btn["Button Name"] ||
-        btn["App Name"] ||
-        ""
-      ).trim();
-
       const url = (
         btn.url ||
         btn.URL ||
@@ -149,7 +123,6 @@ function normalizeButtons(buttons) {
         btn.Link ||
         btn["App URL"] ||
         btn["Button URL"] ||
-        APP_URLS[key] ||
         ""
       ).trim();
 
@@ -167,7 +140,7 @@ function normalizeButtons(buttons) {
       ).trim();
 
       if (!url || !label) return null;
-      return { ...btn, key: key || label, url, label };
+      return { ...btn, url, label };
     })
     .filter(Boolean);
 }
@@ -189,10 +162,7 @@ function syncPinDots() {
   const pin = pinInput.value.trim();
   pinDots.forEach((dot, index) => {
     dot.classList.toggle("filled", index < pin.length);
-    dot.classList.toggle(
-      "active",
-      index === Math.min(pin.length, pinDots.length - 1) && pin.length < AUTO_PIN_LENGTH
-    );
+    dot.classList.toggle("active", index === Math.min(pin.length, pinDots.length - 1) && pin.length < AUTO_PIN_LENGTH);
   });
 }
 
