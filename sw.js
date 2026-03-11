@@ -1,4 +1,4 @@
-const CACHE = "myfarmbox-internal-app-v1";
+const CACHE = "myfarmbox-internal-app-v3";
 const ASSETS = [
   "./",
   "./index.html",
