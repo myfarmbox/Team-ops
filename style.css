@@ -41,8 +41,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 120px;
-  margin-bottom: 16px;
+  min-height: 0;
+  margin-bottom: 8px;
   position: relative;
 }
 
@@ -323,11 +323,14 @@ body {
 }
 
 .boot-loader.hidden,
-.overlay:not(.show),
-.hidden {
+.overlay:not(.show) {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+}
+
+.hidden {
+  display: none !important;
 }
 
 .boot-card,
