@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MyFarmBox Ops</title>
 
-  <meta name="theme-color" content="#0b140b">
+  <meta name="theme-color" content="#121212">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="MyFarmBox Ops">
@@ -14,7 +14,8 @@
   <link rel="apple-touch-icon" href="logo.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -22,7 +23,7 @@
     <div class="boot-card">
       <img src="logo.png" class="boot-logo" alt="MyFarmBox Logo" onerror="this.style.display='none'">
       <div class="boot-title">MyFarmBox</div>
-      <div class="boot-sub">Loading Internal App</div>
+      <div class="boot-sub">Preparing the internal command deck</div>
       <div class="boot-line"><span></span></div>
     </div>
   </div>
@@ -44,90 +45,153 @@
   </div>
 
   <main class="app-shell">
-    <header class="hero">
-      <div class="brand-row">
-        <img src="logo.png" alt="MyFarmBox Logo" class="brand-logo" onerror="this.style.display='none'">
-        <div class="brand-copy">
-          <div class="brand-name">MyFarmBox</div>
-          <div class="brand-tag">Internal Operations</div>
-        </div>
-      </div>
+    <section class="device-frame">
+      <div class="device-sheen"></div>
 
-      <div class="hero-copy glass-card">
-        <div>
-          <h1>Team <em>Operations</em></h1>
-          <p>PIN-protected internal hub for daily workflows.</p>
+      <header class="hero">
+        <div class="brand-row">
+          <div class="brand-mark">
+            <img src="logo.png" alt="MyFarmBox Logo" class="brand-logo" onerror="this.style.display='none'">
+          </div>
+          <div class="brand-copy">
+            <div class="brand-tag">Private Ops Network</div>
+            <div class="brand-name">MyFarmBox</div>
+          </div>
+          <div class="brand-status">
+            <span class="live-dot"></span>
+            <span>Internal</span>
+          </div>
         </div>
-        <button id="installBtn" class="install-btn hidden" type="button">Install App</button>
-      </div>
-    </header>
 
-    <section id="loginCard" class="glass-card login-card">
-      <div class="card-top">
-        <div>
-          <h2>Security PIN</h2>
-          <p>Enter your access PIN to load your role-based tools.</p>
+        <div class="hero-copy glass-card">
+          <div class="hero-grid">
+            <div class="hero-text">
+              <div class="eyebrow">Operations cockpit</div>
+              <h1>Fast access for your <em>daily farm workflows.</em></h1>
+              <p>Secure login, role-based tools, and a premium internal experience built to feel product-grade on GitHub Pages and mobile install.</p>
+
+              <div class="hero-actions">
+                <button id="installBtn" class="install-btn hidden" type="button">Install App</button>
+                <div class="hero-note">Protected by PIN. Delivered as a lightweight PWA.</div>
+              </div>
+            </div>
+
+            <div class="hero-panel">
+              <div class="hero-stat">
+                <span class="hero-stat-label">Access Layer</span>
+                <strong>PIN Verified</strong>
+              </div>
+              <div class="hero-stat">
+                <span class="hero-stat-label">Tool Delivery</span>
+                <strong>Role Based</strong>
+              </div>
+              <div class="hero-stat accent">
+                <span class="hero-stat-label">Designed For</span>
+                <strong>Mobile First Ops</strong>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="secure-pill">
+      </header>
+
+      <section class="showcase-strip">
+        <article class="showcase-card glass-card">
+          <div class="showcase-kicker">Mission</div>
+          <h2>One polished surface for internal execution.</h2>
+          <p>Replace scattered links with a single branded command center that feels intentional, fast, and trustworthy.</p>
+        </article>
+        <article class="showcase-mini">
+          <span>Launch tools</span>
+          <strong>in one tap</strong>
+        </article>
+        <article class="showcase-mini">
+          <span>Session memory</span>
+          <strong>8 hour secure state</strong>
+        </article>
+      </section>
+
+      <section id="loginCard" class="glass-card login-card">
+        <div class="card-top">
+          <div>
+            <div class="eyebrow">Secure entry</div>
+            <h2>Unlock the operations deck</h2>
+            <p>Enter your access PIN to load the exact tools mapped to your role and responsibilities.</p>
+          </div>
+          <div class="secure-pill">
+            <span class="live-dot"></span>
+            <span>Protected</span>
+          </div>
+        </div>
+
+        <div class="login-form">
+          <input id="pinInput" class="pin-input" type="password" inputmode="numeric" autocomplete="one-time-code" placeholder="Enter PIN" maxlength="12">
+          <button id="loginBtn" class="primary-btn" type="button">Unlock</button>
+          <button id="clearBtn" class="ghost-btn" type="button">Clear</button>
+        </div>
+
+        <div class="login-meta">
+          <div id="errorText" class="error-text"></div>
+          <div class="meta-note">Google Sheet mapped role access</div>
+        </div>
+      </section>
+
+      <section id="userCard" class="glass-card user-card hidden">
+        <div>
+          <div class="eyebrow">Session live</div>
+          <div id="userName" class="user-name">-</div>
+          <div id="userRole" class="user-role">Role based tools loaded</div>
+        </div>
+        <button id="logoutBtn" class="logout-btn" type="button">Logout</button>
+      </section>
+
+      <section class="tools-head">
+        <div class="section-label">Apps &amp; Tools</div>
+        <p class="section-copy">Your role-specific launchpad appears here after authentication.</p>
+      </section>
+
+      <section id="emptyState" class="glass-card empty-state hidden">
+        No tools are available for this login yet.
+      </section>
+
+      <section id="toolsGrid" class="tools-grid"></section>
+
+      <section class="quick-section glass-card">
+        <div class="quick-head">
+          <div>
+            <div class="section-label">Quick Contact</div>
+            <p class="section-copy">Fast routes for escalations and internal coordination.</p>
+          </div>
+          <div class="quick-badge">Priority line</div>
+        </div>
+        <div class="quick-row">
+          <a class="quick-btn" href="tel:7448444681">
+            <span class="quick-icon">01</span>
+            <span class="quick-copy">
+              <strong>Call Admin</strong>
+              <small>Immediate operational support</small>
+            </span>
+          </a>
+          <a class="quick-btn" href="mailto:ajeeth@myfarmbox.in?subject=MyFarmBox%20Ops">
+            <span class="quick-icon">02</span>
+            <span class="quick-copy">
+              <strong>Email Ajeeth</strong>
+              <small>Share issues, requests, or follow-ups</small>
+            </span>
+          </a>
+        </div>
+      </section>
+
+      <footer class="footer glass-card">
+        <div>
+          <div id="clock" class="clock">-</div>
+          <div id="dateLine" class="date-line">-</div>
+        </div>
+        <div class="footer-pill">
           <span class="live-dot"></span>
-          <span>Protected</span>
+          <span id="footerStatus">Awaiting secure login</span>
         </div>
-      </div>
-
-      <div class="login-form">
-        <input id="pinInput" class="pin-input" type="password" inputmode="numeric" autocomplete="one-time-code" placeholder="Enter PIN" maxlength="12">
-        <button id="loginBtn" class="primary-btn" type="button">Unlock</button>
-        <button id="clearBtn" class="ghost-btn" type="button">Clear</button>
-      </div>
-
-      <div class="login-meta">
-        <div id="errorText" class="error-text"></div>
-        <div class="meta-note">Google Sheet based role access</div>
-      </div>
+      </footer>
     </section>
-
-    <section id="userCard" class="glass-card user-card hidden">
-      <div>
-        <div id="userName" class="user-name">-</div>
-        <div id="userRole" class="user-role">Role based tools loaded</div>
-      </div>
-      <button id="logoutBtn" class="logout-btn" type="button">Logout</button>
-    </section>
-
-    <section class="tools-head">
-      <div class="section-label">Apps &amp; Tools</div>
-    </section>
-
-    <section id="emptyState" class="glass-card empty-state hidden">
-      No tools are available for this login yet.
-    </section>
-
-    <section id="toolsGrid" class="tools-grid"></section>
-
-    <section class="quick-section">
-      <div class="section-label">Quick Contact</div>
-      <div class="quick-row">
-        <a class="quick-btn" href="tel:7448444681">
-          <span>📱</span>
-          <span>Call Admin</span>
-        </a>
-        <a class="quick-btn" href="mailto:ajeeth@myfarmbox.in?subject=MyFarmBox%20Ops">
-          <span>✉️</span>
-          <span>Email Ajeeth</span>
-        </a>
-      </div>
-    </section>
-
-    <footer class="footer">
-      <div>
-        <div id="clock" class="clock">-</div>
-        <div id="dateLine" class="date-line">-</div>
-      </div>
-      <div class="footer-pill">
-        <span class="live-dot"></span>
-        <span id="footerStatus">Awaiting secure login</span>
-      </div>
-    </footer>
   </main>
 
   <script src="script.js"></script>

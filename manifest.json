@@ -3,8 +3,8 @@
   "short_name": "MyFarmBox Ops",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#091109",
-  "theme_color": "#0b140b",
+  "background_color": "#121212",
+  "theme_color": "#121212",
   "icons": [
     {
       "src": "logo.png",
