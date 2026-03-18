@@ -1,10 +1,9 @@
 const LOGIN_API = "https://script.google.com/macros/s/AKfycbxBI0SbhJVUAv0GM1OuhUN8vbcQVT-26uUPWbcjhIs1fRB-h6awdYZFwAQQSFibL4pKrg/exec";
 const SESSION_KEY = "mfb_internal_app_session";
 const SESSION_AGE_MS = 8 * 60 * 60 * 1000;
-const AUTO_PIN_LENGTH = 4;
+const MAX_PIN_LENGTH = 4;
 
 let deferredPrompt = null;
-let autoLoginTimer = null;
 let isLoggingIn = false;
 
 const TOOL_META = {
@@ -102,7 +101,6 @@ function showToast(message, type = "normal") {
 
 function hideToast(delay = 1200) {
   if (!statusToast) return;
-
   setTimeout(() => {
     statusToast.classList.remove("show", "success", "error");
   }, delay);
@@ -246,13 +244,14 @@ function syncPinDots() {
   pinDots.forEach((dot, index) => {
     dot.classList.toggle("filled", index < pin.length);
     dot.classList.toggle("active", index === pin.length && pin.length < pinDots.length);
-  });
-}
 
-function clearAutoLoginTimer() {
-  if (!autoLoginTimer) return;
-  clearTimeout(autoLoginTimer);
-  autoLoginTimer = null;
+    dot.textContent = index < pin.length ? pin[index] : "";
+    dot.style.display = "grid";
+    dot.style.placeItems = "center";
+    dot.style.fontWeight = "700";
+    dot.style.fontSize = "22px";
+    dot.style.color = "#333333";
+  });
 }
 
 function pulsePinError() {
@@ -263,25 +262,12 @@ function pulsePinError() {
   loginCard.classList.add("shake");
 }
 
-function queueAutoLogin() {
-  clearAutoLoginTimer();
-
-  if (isLoggingIn) return;
-  if (!pinInput) return;
-  if (pinInput.value.trim().length < AUTO_PIN_LENGTH) return;
-
-  autoLoginTimer = setTimeout(() => {
-    handleLogin();
-  }, 320);
-}
-
 function setPinValue(nextValue) {
   if (!pinInput) return;
 
-  pinInput.value = nextValue.slice(0, 12);
+  pinInput.value = String(nextValue).slice(0, MAX_PIN_LENGTH);
   setError("");
   syncPinDots();
-  queueAutoLogin();
 }
 
 function bindTool(card, label, url) {
@@ -352,24 +338,14 @@ function showLoggedIn(user, buttons) {
   if (userCard) userCard.classList.remove("hidden");
   if (quickSection) quickSection.classList.remove("hidden");
 
-  if (userName) {
-    userName.textContent = user.name || "Team User";
-  }
-
-  if (userRole) {
-    userRole.textContent = user.role || "Access active";
-  }
-
-  if (footerStatus) {
-    footerStatus.textContent = "Secure session active";
-  }
+  if (userName) userName.textContent = user.name || "Team User";
+  if (userRole) userRole.textContent = user.role || "Access active";
+  if (footerStatus) footerStatus.textContent = "Secure session active";
 
   renderButtons(buttons || []);
 }
 
 function showLoggedOut() {
-  clearAutoLoginTimer();
-
   if (loginCard) loginCard.classList.remove("hidden");
   if (userCard) userCard.classList.add("hidden");
   if (quickSection) quickSection.classList.add("hidden");
@@ -391,19 +367,28 @@ function setLoggingState(active) {
 function applyKey(value) {
   if (isLoggingIn || !pinInput) return;
 
+  const current = pinInput.value || "";
+
   if (value === "clear") {
-    setPinValue("");
+    pinInput.value = "";
+    syncPinDots();
+    setError("");
     return;
   }
 
   if (value === "backspace") {
-    setPinValue(pinInput.value.slice(0, -1));
+    pinInput.value = current.slice(0, -1);
+    syncPinDots();
+    setError("");
     return;
   }
 
-  if (!/^\\d$/.test(String(value)) || pinInput.value.length >= 12) return;
-
-  setPinValue(pinInput.value + String(value));
+  if (/^\\d$/.test(String(value))) {
+    if (current.length >= MAX_PIN_LENGTH) return;
+    pinInput.value = current + String(value);
+    syncPinDots();
+    setError("");
+  }
 }
 
 async function fetchLogin(pin) {
@@ -424,6 +409,7 @@ async function handleLogin() {
   if (!pinInput) return;
 
   const pin = pinInput.value.trim();
+  console.log("PIN VALUE:", pin);
 
   if (!pin || isLoggingIn) {
     if (!pin) {
@@ -435,7 +421,6 @@ async function handleLogin() {
     return;
   }
 
-  clearAutoLoginTimer();
   setLoggingState(true);
   setError("");
   showOverlay("Authenticating");
@@ -487,7 +472,6 @@ if (pinInput) {
   pinInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      clearAutoLoginTimer();
       handleLogin();
       return;
     }
@@ -505,7 +489,9 @@ if (pinInput) {
   });
 
   pinInput.addEventListener("input", () => {
-    setPinValue(pinInput.value.replace(/\\D/g, ""));
+    pinInput.value = pinInput.value.replace(/\\D/g, "").slice(0, MAX_PIN_LENGTH);
+    syncPinDots();
+    setError("");
   });
 }
 
@@ -513,26 +499,20 @@ keypadButtons.forEach((button) => {
   button.addEventListener("click", (event) => {
     ripple(button, event);
 
-    const rawKey =
-      button.dataset.key ||
-      (button.id === "clearBtn" ? "clear" : "") ||
-      (button.id === "loginBtn" ? "go" : "") ||
-      button.textContent.trim();
-
-    const key = String(rawKey).toLowerCase();
-
-    if (key === "go") {
-      clearAutoLoginTimer();
+    if (button.id === "loginBtn") {
       handleLogin();
       return;
     }
 
-    if (key === "clear") {
+    if (button.id === "clearBtn") {
       applyKey("clear");
       return;
     }
 
-    applyKey(rawKey);
+    const key = button.getAttribute("data-key");
+    if (key) {
+      applyKey(key);
+    }
   });
 });
 
