@@ -44,7 +44,15 @@
     </header>
 
     <section id="loginCard" class="login-card">
-      <input id="pinInput" class="pin-input" type="password" inputmode="numeric" autocomplete="one-time-code" maxlength="12" aria-label="PIN">
+      <input
+        id="pinInput"
+        class="pin-input"
+        type="password"
+        inputmode="numeric"
+        autocomplete="one-time-code"
+        maxlength="12"
+        aria-label="PIN"
+      >
 
       <div id="pinDots" class="pin-dots" aria-hidden="true">
         <span class="pin-dot"></span>
@@ -85,17 +93,19 @@
 
     <section id="toolsGrid" class="tools-grid"></section>
 
-    <footer class="footer">
-      <div class="footer-actions">
-        <a class="footer-btn quick-btn" href="tel:7448444681">Call Admin</a>
-        <a class="footer-btn quick-btn" href="mailto:ajeeth@myfarmbox.in?subject=MyFarmBox%20Ops">Email</a>
-      </div>
-      <div class="footer-meta">
-        <span id="clock" class="clock">-</span>
-        <span id="dateLine" class="date-line">-</span>
-        <span id="footerStatus" class="footer-status">Awaiting secure login</span>
-      </div>
-    </footer>
+    <section id="quickSection" class="hidden">
+      <footer class="footer">
+        <div class="footer-actions">
+          <a class="footer-btn quick-btn" href="tel:7448444681">Call Admin</a>
+          <a class="footer-btn quick-btn" href="mailto:ajeeth@myfarmbox.in?subject=MyFarmBox%20Ops">Email</a>
+        </div>
+        <div class="footer-meta">
+          <span id="clock" class="clock">-</span>
+          <span id="dateLine" class="date-line">-</span>
+          <span id="footerStatus" class="footer-status">Awaiting secure login</span>
+        </div>
+      </footer>
+    </section>
   </main>
 
   <script src="script.js"></script>
