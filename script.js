@@ -48,7 +48,7 @@ const footerStatus = document.getElementById("footerStatus");
 const installBtn = document.getElementById("installBtn");
 const quickSection = document.getElementById("quickSection");
 const pinDots = Array.from(document.querySelectorAll(".pin-dot"));
-const keypadButtons = Array.from(document.querySelectorAll(".numpad-key[data-key]"));
+const keypadButtons = Array.from(document.querySelectorAll(".numpad-key"));
 
 setTimeout(() => {
   if (bootLoader) bootLoader.classList.add("hidden");
@@ -245,10 +245,7 @@ function syncPinDots() {
 
   pinDots.forEach((dot, index) => {
     dot.classList.toggle("filled", index < pin.length);
-    dot.classList.toggle(
-      "active",
-      index === Math.min(pin.length, pinDots.length - 1) && pin.length < AUTO_PIN_LENGTH
-    );
+    dot.classList.toggle("active", index === pin.length && pin.length < pinDots.length);
   });
 }
 
@@ -404,9 +401,9 @@ function applyKey(value) {
     return;
   }
 
-  if (!/^\\d$/.test(value) || pinInput.value.length >= 12) return;
+  if (!/^\\d$/.test(String(value)) || pinInput.value.length >= 12) return;
 
-  setPinValue(pinInput.value + value);
+  setPinValue(pinInput.value + String(value));
 }
 
 async function fetchLogin(pin) {
@@ -479,19 +476,6 @@ async function handleLogin() {
   }
 }
 
-if (loginBtn) {
-  loginBtn.addEventListener("click", () => {
-    clearAutoLoginTimer();
-    handleLogin();
-  });
-}
-
-if (clearBtn) {
-  clearBtn.addEventListener("click", () => {
-    applyKey("clear");
-  });
-}
-
 if (logoutBtn) {
   logoutBtn.addEventListener("click", () => {
     clearSession();
@@ -528,7 +512,27 @@ if (pinInput) {
 keypadButtons.forEach((button) => {
   button.addEventListener("click", (event) => {
     ripple(button, event);
-    applyKey(button.dataset.key);
+
+    const rawKey =
+      button.dataset.key ||
+      (button.id === "clearBtn" ? "clear" : "") ||
+      (button.id === "loginBtn" ? "go" : "") ||
+      button.textContent.trim();
+
+    const key = String(rawKey).toLowerCase();
+
+    if (key === "go") {
+      clearAutoLoginTimer();
+      handleLogin();
+      return;
+    }
+
+    if (key === "clear") {
+      applyKey("clear");
+      return;
+    }
+
+    applyKey(rawKey);
   });
 });
 
