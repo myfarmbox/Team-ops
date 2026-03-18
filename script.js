@@ -8,16 +8,22 @@ let autoLoginTimer = null;
 let isLoggingIn = false;
 
 const TOOL_META = {
-  Harvest: { label: "Harvest", icon: "🌾", cls: "i-green" },
-  WhatsApp: { label: "WhatsApp", icon: "💬", cls: "i-teal" },
-  Orders: { label: "Orders", icon: "🧾", cls: "i-navy" },
-  Consolidation: { label: "Consolidation", icon: "🧾", cls: "i-navy" },
-  "Orders - Consolidation": { label: "Orders - Consolidation", icon: "🧾", cls: "i-navy" },
-  "Phone Orders": { label: "Phone Orders", icon: "📞", cls: "i-earth" },
-  Delivery: { label: "Delivery", icon: "🚚", cls: "i-gold" },
-  Attendance: { label: "Attendance", icon: "👨‍🌾", cls: "i-earth" },
-  "MFB Members Data": { label: "MFB Members Data", icon: "👥", cls: "i-navy" },
-  "MyFarmBox Master data": { label: "MyFarmBox Master data", icon: "👥", cls: "i-navy" }
+  Harvest: { label: "Harvest", icon: "icons/harvest.svg", cls: "i-green" },
+  WhatsApp: { label: "WhatsApp", icon: "icons/whatsapp.svg", cls: "i-teal" },
+  Orders: { label: "Orders", icon: "icons/consolidation.svg", cls: "i-navy" },
+  Consolidation: { label: "Consolidation", icon: "icons/consolidation.svg", cls: "i-navy" },
+  "Orders - Consolidation": { label: "Orders - Consolidation", icon: "icons/consolidation.svg", cls: "i-navy" },
+  "Phone Orders": { label: "Phone Orders", icon: "icons/consolidation.svg", cls: "i-earth" },
+  Delivery: { label: "Delivery", icon: "icons/delivery.svg", cls: "i-gold" },
+  "Delivery Console": { label: "Delivery", icon: "icons/delivery.svg", cls: "i-gold" },
+  Attendance: { label: "Attendance", icon: "icons/attendance.svg", cls: "i-earth" },
+  "MFB Members Data": { label: "MFB Members Data", icon: "icons/members.svg", cls: "i-navy" },
+  "MyFarmBox Master data": { label: "MyFarmBox Master data", icon: "icons/members.svg", cls: "i-navy" },
+  "Farm Pickup": { label: "Farm Pickup", icon: "icons/farm_pickup.svg", cls: "i-green" },
+  FarmPickup: { label: "Farm Pickup", icon: "icons/farm_pickup.svg", cls: "i-green" },
+  Website: { label: "Website List update", icon: "icons/website.svg", cls: "i-teal" },
+  "Website List update": { label: "Website List update", icon: "icons/website.svg", cls: "i-teal" },
+  "Website List Update": { label: "Website List update", icon: "icons/website.svg", cls: "i-teal" }
 };
 
 const bootLoader = document.getElementById("bootLoader");
@@ -103,10 +109,34 @@ function clearSession() {
   localStorage.removeItem(SESSION_KEY);
 }
 
+function normalizeToolKey(key) {
+  const map = {
+    Harvest: "Harvest",
+    WhatsApp: "WhatsApp",
+    Orders: "Orders",
+    Consolidation: "Consolidation",
+    "Order Consolidation": "Orders",
+    "Orders - Consolidation": "Orders - Consolidation",
+    "Phone Orders": "Phone Orders",
+    Delivery: "Delivery",
+    "Delivery Console": "Delivery Console",
+    Attendance: "Attendance",
+    "MFB Members Data": "MFB Members Data",
+    "MyFarmBox Master data": "MyFarmBox Master data",
+    "Farm Pickup": "Farm Pickup",
+    FarmPickup: "FarmPickup",
+    Website: "Website",
+    "Website List update": "Website List update",
+    "Website List Update": "Website List Update"
+  };
+  return map[key] || key;
+}
+
 function toolMeta(btn) {
-  return TOOL_META[btn.key] || TOOL_META[btn.label] || {
+  const key = normalizeToolKey(btn.key || btn.label || "");
+  return TOOL_META[key] || {
     label: btn.label || "Tool",
-    icon: "↗",
+    icon: "icons/website.svg",
     cls: "i-green"
   };
 }
@@ -116,7 +146,7 @@ function normalizeButtons(buttons) {
 
   return buttons
     .map((btn) => {
-      const url = (
+      const url = String(
         btn.url ||
         btn.URL ||
         btn.link ||
@@ -126,7 +156,7 @@ function normalizeButtons(buttons) {
         ""
       ).trim();
 
-      const label = (
+      const label = String(
         btn.label ||
         btn.name ||
         btn.key ||
@@ -214,6 +244,7 @@ function bindTool(card, label, url) {
 function renderButtons(buttons) {
   const visibleButtons = normalizeButtons(buttons);
   toolsGrid.innerHTML = "";
+
   if (!visibleButtons.length) {
     emptyState.classList.remove("hidden");
     return;
@@ -224,6 +255,7 @@ function renderButtons(buttons) {
   visibleButtons.forEach((btn) => {
     const meta = toolMeta(btn);
     const label = btn.label && btn.label !== btn.key ? btn.label : meta.label;
+
     const card = document.createElement("a");
     card.href = btn.url;
     card.className = "tool-card";
@@ -231,10 +263,14 @@ function renderButtons(buttons) {
     card.target = "_blank";
     card.rel = "noopener";
     card.setAttribute("aria-label", label);
+
     card.innerHTML = `
-      <div class="tool-icon">${meta.icon}</div>
+      <div class="tool-icon">
+        <img src="${meta.icon}" alt="${label}" style="width:24px;height:24px;display:block;" />
+      </div>
       <div class="tool-title">${label}</div>
     `;
+
     bindTool(card, label, btn.url);
     toolsGrid.appendChild(card);
   });
@@ -268,15 +304,18 @@ function setLoggingState(active) {
 
 function applyKey(value) {
   if (isLoggingIn) return;
+
   if (value === "clear") {
     setPinValue("");
     return;
   }
+
   if (value === "backspace") {
     setPinValue(pinInput.value.slice(0, -1));
     return;
   }
-  if (!/^\d$/.test(value) || pinInput.value.length >= 12) return;
+
+  if (!/^\\d$/.test(value) || pinInput.value.length >= 12) return;
   setPinValue(pinInput.value + value);
 }
 
@@ -361,19 +400,21 @@ pinInput.addEventListener("keydown", (event) => {
     handleLogin();
     return;
   }
+
   if (event.key === "Backspace") {
     event.preventDefault();
     applyKey("backspace");
     return;
   }
-  if (/^\d$/.test(event.key)) {
+
+  if (/^\\d$/.test(event.key)) {
     event.preventDefault();
     applyKey(event.key);
   }
 });
 
 pinInput.addEventListener("input", () => {
-  setPinValue(pinInput.value.replace(/\D/g, ""));
+  setPinValue(pinInput.value.replace(/\\D/g, ""));
 });
 
 keypadButtons.forEach((button) => {
