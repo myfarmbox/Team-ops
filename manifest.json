@@ -1,20 +1,26 @@
 {
   "name": "MyFarmBox Internal App",
   "short_name": "MyFarmBox Ops",
-  "start_url": "./",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#f5f5dc",
   "theme_color": "#228b22",
+  "description": "MyFarmBox internal operations dashboard for team access and tools",
+  
   "icons": [
     {
       "src": "logo.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "logo.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
