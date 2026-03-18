@@ -219,7 +219,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 14px;
+  justify-content: space-between;
+  gap: 16px;
   min-height: 132px;
   padding: 18px;
   color: inherit;
@@ -228,20 +229,27 @@ body {
 }
 
 .tool-icon {
-  width: 48px;
-  height: 48px;
+  width: 46px;
+  height: 46px;
   display: grid;
   place-items: center;
   border-radius: var(--radius-sm);
   background: rgba(34, 139, 34, 0.08);
-  color: var(--green);
-  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.tool-icon img {
+  width: 24px;
+  height: 24px;
+  display: block;
+  object-fit: contain;
 }
 
 .tool-title {
   font-size: 15px;
   font-weight: 700;
   line-height: 1.3;
+  letter-spacing: -0.01em;
 }
 
 .tool-copy,
@@ -269,6 +277,30 @@ body {
 
 .i-earth {
   color: var(--charcoal);
+}
+
+.quick-section {
+  margin-top: 18px;
+}
+
+.quick-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quick-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(244, 243, 232, 0.88);
+  text-decoration: none;
+  font-size: 13px;
 }
 
 .footer {
@@ -446,6 +478,17 @@ body {
   .tool-card {
     min-height: 120px;
     padding: 16px;
+    gap: 14px;
+  }
+
+  .tool-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .tool-icon img {
+    width: 22px;
+    height: 22px;
   }
 
   .footer {
