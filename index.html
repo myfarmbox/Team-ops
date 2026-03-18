@@ -62,18 +62,18 @@
       </div>
 
       <div class="numpad" aria-label="PIN keypad">
-        <button class="numpad-key" type="button" data-key="1">1</button>
-        <button class="numpad-key" type="button" data-key="2">2</button>
-        <button class="numpad-key" type="button" data-key="3">3</button>
-        <button class="numpad-key" type="button" data-key="4">4</button>
-        <button class="numpad-key" type="button" data-key="5">5</button>
-        <button class="numpad-key" type="button" data-key="6">6</button>
-        <button class="numpad-key" type="button" data-key="7">7</button>
-        <button class="numpad-key" type="button" data-key="8">8</button>
-        <button class="numpad-key" type="button" data-key="9">9</button>
-        <button id="clearBtn" class="numpad-key numpad-key-muted" type="button">Clear</button>
-        <button class="numpad-key" type="button" data-key="0">0</button>
-        <button id="loginBtn" class="numpad-key numpad-key-accent" type="button">Go</button>
+        <button class="numpad-key" type="button" data-key="1" aria-label="1">1</button>
+        <button class="numpad-key" type="button" data-key="2" aria-label="2">2</button>
+        <button class="numpad-key" type="button" data-key="3" aria-label="3">3</button>
+        <button class="numpad-key" type="button" data-key="4" aria-label="4">4</button>
+        <button class="numpad-key" type="button" data-key="5" aria-label="5">5</button>
+        <button class="numpad-key" type="button" data-key="6" aria-label="6">6</button>
+        <button class="numpad-key" type="button" data-key="7" aria-label="7">7</button>
+        <button class="numpad-key" type="button" data-key="8" aria-label="8">8</button>
+        <button class="numpad-key" type="button" data-key="9" aria-label="9">9</button>
+        <button id="clearBtn" class="numpad-key numpad-key-muted" type="button" aria-label="Clear PIN">Clear</button>
+        <button class="numpad-key" type="button" data-key="0" aria-label="0">0</button>
+        <button id="loginBtn" class="numpad-key numpad-key-accent" type="button" aria-label="Login">Go</button>
       </div>
 
       <div id="errorText" class="error-text"></div>
@@ -91,7 +91,7 @@
       No tools available
     </section>
 
-    <section id="toolsGrid" class="tools-grid"></section>
+    <section id="toolsGrid" class="tools-grid" aria-live="polite"></section>
 
     <section id="quickSection" class="hidden">
       <footer class="footer">
