@@ -12,6 +12,9 @@
 
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="logo.png">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -790,7 +793,18 @@
     });
 
     if("serviceWorker" in navigator){
+      // Unregister old service workers so stale cached files don't block updates
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        regs.forEach(reg => reg.unregister());
+      });
       window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
     }
 
-    const
+    const session=getSession();
+    if(session&&session.user) showLoggedIn(session.user,session.buttons||[]);
+    else showLoggedOut();
+
+    syncPinDots();
+  </script>
+</body>
+</html>
