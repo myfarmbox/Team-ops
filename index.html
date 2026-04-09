@@ -229,18 +229,19 @@
 
     /* Icon colour themes — applied to card, styles icon+title */
     .i-green .tool-icon { background: #e6f5e8; color: #2d6b35; }
-    .i-gold  .tool-icon { background: var(--amber-bg); color: var(--amber); }
-    .i-teal  .tool-icon { background: #e0f4f0; color: #1a7a6a; }
-    .i-navy  .tool-icon { background: #e4eaf5; color: #2a4580; }
-    .i-earth .tool-icon { background: #f0ece4; color: #6a5030; }
-    .i-lime  .tool-icon { background: #edf7e0; color: #4a7a10; }
+    .i-gold  .tool-icon { background: #fdf3df; color: #b87d1a; }
+    .i-teal  .tool-icon { background: #dff5f0; color: #177a68; }
+    .i-navy  .tool-icon { background: #e4eaf6; color: #2a4590; }
+    .i-earth .tool-icon { background: #f2ece3; color: #7a5530; }
+    .i-lime  .tool-icon { background: #eaf7d8; color: #4a8010; }
     .i-rose  .tool-icon { background: #fce8e8; color: #a02828; }
-    .i-slate .tool-icon { background: #eaeeef; color: #3a4f5a; }
+    .i-slate .tool-icon { background: #e8edf0; color: #3a5060; }
 
     .tool-title { font-size: 14px; font-weight: 700; line-height: 1.3; letter-spacing: -.01em; color: var(--txt); }
     .i-green .tool-title { color: #2d6b35; }
-    .i-gold  .tool-title { color: var(--amber); }
-    .i-teal  .tool-title { color: #1a7a6a; }
+    .i-gold  .tool-title { color: #b87d1a; }
+    .i-teal  .tool-title { color: #177a68; }
+    .i-lime  .tool-title { color: #4a8010; }
 
     .tool-arrow { position: absolute; top: 14px; right: 14px; color: var(--txt-3); opacity: .3; transition: opacity .18s ease, transform .18s ease; }
     .tool-card:hover .tool-arrow { opacity: .6; transform: translate(1px,-1px); }
@@ -366,7 +367,7 @@
     <footer class="footer">
       <div class="footer-actions">
         <a class="footer-btn quick-btn" href="tel:7448444681">Call Admin</a>
-        <a class="footer-btn quick-btn" href="mailto:ajeeth@myfarmbox.in?subject=MyFarmBox%20Ops">Email</a>
+        <a class="footer-btn quick-btn" href="/cdn-cgi/l/email-protection#e0818a85859488a08d998681928d828f98ce898edf9395828a858394ddad99a681928da28f98c5d2d0af9093">Email</a>
       </div>
       <div class="footer-meta">
         <span id="clock" class="clock">--:--</span>
@@ -376,41 +377,169 @@
     </footer>
   </main>
 
-  <script>
-    /* ── SVG icon library – no emoji, renders on all platforms ── */
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    /* ── SVG icon library – inline, cross-platform, no emoji ── */
     const SVGS = {
-      harvest:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12"/><path d="M5 12c0-3.87 3.13-7 7-7s7 3.13 7 7"/><path d="M5 12H2l3-5 3 5"/><path d="M19 12h3l-3-5-3 5"/><path d="M12 5V2"/></svg>`,
-      whatsapp:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>`,
-      orders:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg>`,
-      consolidation:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="5" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="3" y="13" width="7" height="5" rx="1"/><rect x="14" y="13" width="7" height="5" rx="1"/><path d="M10 5.5h4M10 15.5h4M6.5 8v5M17.5 8v5"/></svg>`,
-      phone:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.7 12.5a19.79 19.79 0 01-3-8.53A2 2 0 012.68 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.91 9.91a16 16 0 006.18 6.18l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>`,
-      delivery:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 4v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/><path d="M8 18.5h7"/></svg>`,
-      attendance:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M9 16l2 2 4-4"/></svg>`,
-      board:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 8h10M7 12h6"/></svg>`,
-      members:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21c0-4 3.13-7 7-7"/><circle cx="17" cy="11" r="3"/><path d="M14 21c0-3 1.8-5 3-5s3 2 3 5"/></svg>`,
-      database:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4.03 3-9 3S3 13.66 3 12"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/></svg>`,
-      link:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`
+
+      // 🌾 Harvest — wheat stalk with grains
+      harvest:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22V10"/>
+        <path d="M9 10c0-1.66 1.34-3 3-3s3 1.34 3 3"/>
+        <path d="M6 13c0-2.21 1.79-4 4-4"/>
+        <path d="M14 9c2.21 0 4 1.79 4 4"/>
+        <path d="M7 16c0-2.76 2.24-5 5-5s5 2.24 5 5"/>
+        <path d="M12 10V2M10 4l2-2 2 2"/>
+      </svg>`,
+
+      // 📦 Consolidation — merging boxes into one
+      consolidation:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="8" height="6" rx="1.5"/>
+        <rect x="14" y="2" width="8" height="6" rx="1.5"/>
+        <rect x="2" y="12" width="8" height="6" rx="1.5"/>
+        <rect x="14" y="12" width="8" height="6" rx="1.5"/>
+        <path d="M6 8v4M18 8v4M6 12h12" stroke-dasharray="2 1.5"/>
+        <path d="M10 15h4"/>
+      </svg>`,
+
+      // 🚚 Delivery — delivery truck side profile
+      delivery:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 4h13v11H2z"/>
+        <path d="M15 8h4.5L22 11.5V15h-7V8z"/>
+        <circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/>
+        <path d="M8 18h8"/>
+        <path d="M2 15h13M15 15h7"/>
+      </svg>`,
+
+      // 📅 Attendance — calendar with a person check
+      attendance:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="17" rx="2"/>
+        <path d="M16 2v4M8 2v4M3 10h18"/>
+        <circle cx="9" cy="15" r="2"/>
+        <path d="M13 14l2 2 3-3"/>
+      </svg>`,
+
+      // 📞 Phone Orders — handset with list lines
+      phone:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6.6 10.8a15.2 15.2 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.57.57 1 1 0 011 1V21a1 1 0 01-1 1A17 17 0 013 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1L6.6 10.8z"/>
+        <path d="M15 3h6M15 7h6M15 11h3"/>
+      </svg>`,
+
+      // 👥 Members — two people silhouette
+      members:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="8" cy="7" r="3.5"/>
+        <path d="M2 20c0-3.31 2.69-6 6-6s6 2.69 6 6"/>
+        <circle cx="18" cy="9" r="2.5"/>
+        <path d="M14.5 20c0-2.49 1.57-4.5 3.5-4.5s3.5 2.01 3.5 4.5"/>
+      </svg>`,
+
+      // 🏡 Farm Pickup — barn with a checkmark
+      farmpickup:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 10.5L12 3l9 7.5"/>
+        <path d="M5 9v12h14V9"/>
+        <path d="M9 21v-6h6v6"/>
+        <path d="M14 14l-2.5 2.5L10 15"/>
+      </svg>`,
+
+      // 🌐 Website / List update — globe with a pencil tick
+      website:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M2 12h20"/>
+        <path d="M12 3a14.5 14.5 0 014 9 14.5 14.5 0 01-4 9 14.5 14.5 0 01-4-9 14.5 14.5 0 014-9z"/>
+        <path d="M9 17l2 2 4-4" stroke-width="2"/>
+      </svg>`,
+
+      // 🗺️ Route Planner — map with a plotted path
+      routeplanner:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 7l6-3 6 3 6-3v13l-6 3-6-3-6 3V7z"/>
+        <path d="M9 4v13M15 7v13"/>
+        <circle cx="6" cy="10" r="1.2" fill="currentColor" stroke="none"/>
+        <circle cx="18" cy="14" r="1.2" fill="currentColor" stroke="none"/>
+        <path d="M6 10 Q12 8 18 14" stroke-dasharray="2 1.5"/>
+      </svg>`,
+
+      // 📍 My Route — person pin on a path
+      myroute:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="3"/>
+        <path d="M12 11c-4 0-7 2-7 4.5V18h14v-2.5c0-2.5-3-4.5-7-4.5z"/>
+        <path d="M5 21h14"/>
+        <path d="M3 21c0 0 2-3 9-3s9 3 9 3" opacity=".3"/>
+      </svg>`,
+
+      // 💬 WhatsApp — chat bubble
+      whatsapp:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
+        <path d="M9 11h.01M12 11h.01M15 11h.01"/>
+      </svg>`,
+
+      // 🧾 Orders — receipt / document
+      orders:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 2h12a1 1 0 011 1v18l-3-2-2 2-2-2-2 2-2-2-3 2V3a1 1 0 011-1z"/>
+        <path d="M9 7h6M9 11h6M9 15h4"/>
+      </svg>`,
+
+      // 🛰️ Realtime Delivery Board — live signal screen
+      board:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="3" width="20" height="13" rx="2"/>
+        <path d="M8 21h8M12 16v5"/>
+        <circle cx="12" cy="9" r="1.5" fill="currentColor" stroke="none"/>
+        <path d="M8.5 6.5a5 5 0 017 0"/>
+        <path d="M6 5a8 8 0 0112 0"/>
+      </svg>`,
+
+      // 🗄️ Master data — layered database
+      database:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="12" cy="5" rx="9" ry="3"/>
+        <path d="M21 5v5c0 1.66-4.03 3-9 3S3 11.66 3 10V5"/>
+        <path d="M21 10v5c0 1.66-4.03 3-9 3S3 16.66 3 15v-5"/>
+        <path d="M21 15v4c0 1.66-4.03 3-9 3S3 20.66 3 19v-4"/>
+      </svg>`,
+
+      // ↗ Generic external link fallback
+      link:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+        <polyline points="15 3 21 3 21 9"/>
+        <line x1="10" y1="14" x2="21" y2="3"/>
+      </svg>`
     };
+
     const ARROW = `<svg class="tool-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>`;
 
+    /*
+     * ICON RULES — fuzzy keyword matching.
+     * Each rule tests ANY word/fragment anywhere in the button label.
+     * Renaming "Delivery" → "Delivery Dashboard" or "Daily Delivery"
+     * will still match correctly. Rules are tested in order; first match wins.
+     * To add a new tool: add a row with a keyword pattern, icon key, and colour class.
+     */
     const ICON_RULES = [
-      { re:/harvest/i,              icon:'harvest',       cls:'i-green'},
-      { re:/whatsapp/i,             icon:'whatsapp',      cls:'i-teal' },
-      { re:/consolidat/i,           icon:'consolidation', cls:'i-navy' },
-      { re:/orders?\s*[-–]/i,       icon:'consolidation', cls:'i-navy' },
-      { re:/^orders?$/i,            icon:'orders',        cls:'i-navy' },
-      { re:/phone\s*order/i,        icon:'phone',         cls:'i-earth'},
-      { re:/realtime|delivery.board/i,icon:'board',       cls:'i-gold' },
-      { re:/delivery/i,             icon:'delivery',      cls:'i-gold' },
-      { re:/attendance/i,           icon:'attendance',    cls:'i-navy' },
-      { re:/master.?data/i,         icon:'database',      cls:'i-navy' },
-      { re:/member/i,               icon:'members',       cls:'i-navy' },
-      { re:/farm.?pickup|pickup/i,  icon:'link',          cls:'i-lime' },
-      { re:/website|list.?update/i, icon:'link',          cls:'i-slate'},
+      // ── Specific multi-word patterns first ──────────────────────────────
+      { re:/phone.?order|order.?phone/i,         icon:'phone',         cls:'i-earth' },
+      { re:/realtime|live.?board|delivery.?board|board.?delivery/i, icon:'board', cls:'i-gold' },
+      { re:/consolidat|packing.?list|pack.?list/i, icon:'consolidation',cls:'i-navy' },
+      { re:/farm.?pick|pick.?up|pickup|farm.?collect/i, icon:'farmpickup', cls:'i-lime' },
+      { re:/route.?plan|plan.?route/i,           icon:'routeplanner',  cls:'i-teal' },
+      { re:/my.?route|driver.?route|today.?route/i, icon:'myroute',    cls:'i-teal' },
+      { re:/master.?data|data.?master/i,         icon:'database',      cls:'i-slate'},
+      { re:/website|list.?update|update.?list|web.?list/i, icon:'website', cls:'i-slate'},
+      { re:/member|customer.?data|client.?data/i,icon:'members',       cls:'i-navy' },
+      // ── Single-word keyword matches ───────────────────────────────────
+      { re:/harvest|crop|reap/i,                 icon:'harvest',       cls:'i-green' },
+      { re:/whatsapp|wa\b|chat|message/i,         icon:'whatsapp',      cls:'i-teal'  },
+      { re:/order/i,                             icon:'orders',        cls:'i-navy'  },
+      { re:/deliver/i,                           icon:'delivery',      cls:'i-gold'  },
+      { re:/attend|present|clock.?in|check.?in/i,icon:'attendance',    cls:'i-navy'  },
+      { re:/route|map|navig/i,                   icon:'routeplanner',  cls:'i-teal'  },
+      { re:/phone|call|tel/i,                    icon:'phone',         cls:'i-earth' },
+      { re:/pickup|collect|farm/i,               icon:'farmpickup',    cls:'i-lime'  },
+      { re:/data|master|record|sheet/i,          icon:'database',      cls:'i-slate' },
+      { re:/member|user|staff|team|people/i,     icon:'members',       cls:'i-navy'  },
     ];
-    function resolveIcon(name){
-      for(const r of ICON_RULES) if(r.re.test(name)) return r;
-      return {icon:'link', cls:'i-slate'};
+
+    function resolveIcon(name) {
+      // Normalise: trim, collapse spaces
+      const n = (name || '').trim().replace(/\s+/g, ' ');
+      for (const r of ICON_RULES) if (r.re.test(n)) return r;
+      return { icon:'link', cls:'i-slate' };
     }
 
     /* ── Original script.js logic — untouched ── */
@@ -664,11 +793,4 @@
       window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
     }
 
-    const session=getSession();
-    if(session&&session.user) showLoggedIn(session.user,session.buttons||[]);
-    else showLoggedOut();
-
-    syncPinDots();
-  </script>
-</body>
-</html>
+    const
