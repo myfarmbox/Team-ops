@@ -726,7 +726,9 @@
     const sl=document.getElementById("sectionLabel");
     if(sl) sl.classList.remove("hidden");
     renderButtons(buttons||[]);
-    renderWAMonitorCard();
+    // WA Monitor only visible to ADMIN role
+    const role = (user.role||"").toUpperCase();
+    if(role === "ADMIN" || role === "MANAGER") renderWAMonitorCard();
   }
 
     function showLoggedOut(){
