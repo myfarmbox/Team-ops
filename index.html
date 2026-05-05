@@ -503,6 +503,13 @@
         <polyline points="15 3 21 3 21 9"/>
         <line x1="10" y1="14" x2="21" y2="3"/>
       </svg>`
+      ,monitor:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="3" width="20" height="13" rx="2"/>
+      <path d="M8 21h8M12 16v5"/>
+      <circle cx="7" cy="9" r="1" fill="currentColor" stroke="none"/>
+      <circle cx="12" cy="9" r="1" fill="currentColor" stroke="none"/>
+      <circle cx="17" cy="9" r="1" fill="currentColor" stroke="none"/>
+    </svg>`
     };
 
     const ARROW = `<svg class="tool-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>`;
@@ -547,6 +554,7 @@
 
     /* ── Original script.js logic — untouched ── */
     const LOGIN_API      = "https://script.google.com/macros/s/AKfycbxBI0SbhJVUAv0GM1OuhUN8vbcQVT-26uUPWbcjhIs1fRB-h6awdYZFwAQQSFibL4pKrg/exec";
+    const WA_GAS_URL = "https://script.google.com/macros/s/AKfycbz2yba68hKHzxD7I2M_5IgNZn4FNbA2OGYrHfN8C-OaICH-g1E1nU4NWEb2lUGVpOPtsg/exec";
     const SESSION_KEY    = "mfb_internal_app_session";
     const SESSION_AGE_MS = 8 * 60 * 60 * 1000;
     const AUTO_PIN_LENGTH = 4;
@@ -712,11 +720,14 @@
     }
 
     function showLoggedIn(user,buttons){
-      loginCard.classList.add("hidden"); userCard.classList.remove("hidden");
-      userName.textContent=user.name||"Team User"; userRole.textContent=user.role||"Access active";
-      footerStatus.textContent="Secure session active";
-      renderButtons(buttons||[]);
-    }
+    loginCard.classList.add("hidden"); userCard.classList.remove("hidden");
+    userName.textContent=user.name||"Team User"; userRole.textContent=user.role||"Access active";
+    footerStatus.textContent="Secure session active";
+    const sl=document.getElementById("sectionLabel");
+    if(sl) sl.classList.remove("hidden");
+    renderButtons(buttons||[]);
+    renderWAMonitorCard();
+  }
 
     function showLoggedOut(){
       clearAutoLoginTimer(); loginCard.classList.remove("hidden"); userCard.classList.add("hidden");
@@ -805,6 +816,83 @@
     else showLoggedOut();
 
     syncPinDots();
+
+    async function renderWAMonitorCard() {
+  var card = document.createElement('div');
+  card.className = 'tool-card i-teal';
+  card.style.cssText = 'cursor:pointer;position:relative;animation-delay:.44s';
+  card.innerHTML =
+    '<div class="tool-icon">' + (SVGS.monitor || SVGS.whatsapp) + '</div>' +
+    '<div class="tool-title" style="color:#177a68">WA Monitor</div>' +
+    '<div id="waMonitorStats" style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">' +
+      '<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:999px;background:#e0f2f1;border:1px solid #80cbc4;color:#177a68">Loading…</span>' +
+    '</div>' +
+    ARROW;
+  toolsGrid.appendChild(card);
+ 
+  var tunnelUrl = null;
+ 
+  try {
+    // Step 1 — get tunnel URL from GAS (reads Tunnel Config tab)
+    var res  = await fetch(WA_GAS_URL + '?action=get_tunnel_url', { mode:'cors' });
+    var data = await res.json();
+    tunnelUrl = (data && data.tunnelUrl) ? data.tunnelUrl.trim() : null;
+ 
+    // Step 2 — if server is live, fetch today's queue stats
+    var stats = { total:0, pending:0, sent:0, failed:0 };
+    if (tunnelUrl) {
+      try {
+        var qr   = await fetch(tunnelUrl + '/api/queue-status', { mode:'cors', cache:'no-store' });
+        var qd   = await qr.json();
+        if (qd && qd.ok && qd.rows) {
+          var today = new Date().toISOString().slice(0,10);
+          var tr    = qd.rows.filter(function(r) {
+            var s = String(r.createdAt || '');
+            var p = s.match(/^(\d+)\/(\d+)\/(\d+)/);
+            if (p) s = p[3]+'-'+String(p[1]).padStart(2,'0')+'-'+String(p[2]).padStart(2,'0');
+            return s.startsWith(today);
+          });
+          stats.total   = tr.length;
+          stats.pending = tr.filter(function(r){return r.status==='PENDING';}).length;
+          stats.sent    = tr.filter(function(r){return r.status==='SENT';}).length;
+          stats.failed  = tr.filter(function(r){return r.status==='FAILED';}).length;
+        }
+      } catch(e) { tunnelUrl = null; }
+    }
+ 
+    // Step 3 — update the stats chips
+    var el = document.getElementById('waMonitorStats');
+    if (el) {
+      if (!tunnelUrl) {
+        el.innerHTML = '<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:999px;background:#fce8e8;border:1px solid #f48fb1;color:#b71c1c">⚫ Offline</span>';
+      } else {
+        el.innerHTML =
+          '<span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:#e8f5e9;border:1px solid #a5d6a7;color:#1b5e20">🟢 Live</span>' +
+          '<span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:#e3f2fd;border:1px solid #90caf9;color:#1565c0">' + stats.sent + ' ✓</span>' +
+          (stats.pending ? '<span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:#fff8e1;border:1px solid #ffe082;color:#e65100">' + stats.pending + ' ⏳</span>' : '') +
+          (stats.failed  ? '<span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:#fce8e8;border:1px solid #ef9a9a;color:#b71c1c">' + stats.failed  + ' ✗</span>' : '');
+      }
+    }
+ 
+  } catch(e) {
+    var el = document.getElementById('waMonitorStats');
+    if (el) el.innerHTML = '<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:999px;background:#fce8e8;border:1px solid #f48fb1;color:#b71c1c">⚫ Offline</span>';
+  }
+ 
+  // Step 4 — wire tap
+  card.addEventListener('click', function(evt) {
+    ripple(card, evt);
+    if (!tunnelUrl) {
+      showToast('Server offline — start MFB Sender first', 'error');
+      hideToast(2500);
+      return;
+    }
+    footerStatus.textContent = 'Opening WA Monitor';
+    window.open(tunnelUrl + '/wa-queue-dashboard.html', '_blank', 'noopener');
+    showToast('WA Monitor opened', 'success');
+    hideToast(1200);
+  });
+}
   </script>
 </body>
 </html>
