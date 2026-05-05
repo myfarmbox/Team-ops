@@ -728,7 +728,7 @@
     renderButtons(buttons||[]);
     // WA Monitor only visible to ADMIN role
     const role = (user.role||"").toUpperCase();
-    renderWAMonitorCard();
+    if(role === "ADMIN" || role === "MANAGER")
     }
 
     function showLoggedOut(){
