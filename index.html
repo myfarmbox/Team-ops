@@ -728,70 +728,8 @@
     renderButtons(buttons||[]);
     // WA Monitor only visible to ADMIN role
     const role = (user.role||"").toUpperCase();
-    if(role === "ADMIN" || role === "MANAGER") {   
-      renderWASenderCard();   
-      renderWAMonitorCard();
+    if(role === "ADMIN" || role === "MANAGER") renderWAMonitorCard();
   }
-      
-      async function renderWASenderCard() {
-  var card = document.createElement('div');
-  card.className = 'tool-card i-teal';
-  card.style.cssText = 'cursor:pointer;position:relative;animation-delay:.43s';
-  card.innerHTML =
-    '<div class="tool-icon">' + (SVGS.whatsapp || SVGS.link) + '</div>' +
-    '<div class="tool-title" style="color:#177a68">WA Sender</div>' +
-    '<div id="waSenderStats" style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">' +
-      '<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:999px;background:#e0f2f1;border:1px solid #80cbc4;color:#177a68">Checking…</span>' +
-    '</div>' +
-    ARROW;
-
-  toolsGrid.appendChild(card);
-
-  var tunnelUrl = null;
-
-  try {
-    var res  = await fetch(WA_GAS_URL + '?action=get_tunnel_url', { mode:'cors' });
-    var data = await res.json();
-    tunnelUrl = (data && data.tunnelUrl) ? data.tunnelUrl.trim() : null;
-
-    var el = document.getElementById('waSenderStats');
-
-    if (!tunnelUrl) {
-      el.innerHTML = '<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:999px;background:#fce8e8;border:1px solid #f48fb1;color:#b71c1c">⚫ No URL</span>';
-    } else {
-      try {
-        var check = await fetch(tunnelUrl + '/api/status', { mode:'cors', cache:'no-store' });
-        var checkData = await check.json();
-
-        if (checkData && checkData.ok) {
-          el.innerHTML = '<span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:#e8f5e9;border:1px solid #a5d6a7;color:#1b5e20">🟢 Live</span>';
-        } else {
-          el.innerHTML = '<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:999px;background:#fff8e1;border:1px solid #ffe082;color:#e65100">🟡 URL found</span>';
-        }
-      } catch(e) {
-        el.innerHTML = '<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:999px;background:#fce8e8;border:1px solid #f48fb1;color:#b71c1c">⚫ Offline</span>';
-      }
-    }
-  } catch(e) {
-    var el = document.getElementById('waSenderStats');
-    if (el) el.innerHTML = '<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:999px;background:#fce8e8;border:1px solid #f48fb1;color:#b71c1c">⚫ Offline</span>';
-  }
-
-  card.addEventListener('click', function(evt) {
-    ripple(card, evt);
-
-    if (!tunnelUrl) {
-      showToast('Sender URL not generated yet', 'error');
-      hideToast(2500);
-      return;
-    }
-
-    footerStatus.textContent = 'Opening WA Sender';
-    window.open(tunnelUrl, '_blank', 'noopener');
-    showToast('WA Sender opened', 'success');
-    hideToast(1200);
-  });
-}
 
     function showLoggedOut(){
       clearAutoLoginTimer(); loginCard.classList.remove("hidden"); userCard.classList.add("hidden");
