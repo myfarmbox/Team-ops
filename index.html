@@ -414,38 +414,7 @@
 
 
 
-    /* V2.0 dashboard + app drawer upgrades */
-    .dashboard-card {
-      margin: 14px 16px 0;
-      background: linear-gradient(145deg, var(--g800), var(--g700));
-      color: #fff;
-      border-radius: 28px;
-      padding: 18px;
-      box-shadow: var(--sh-lg);
-      overflow: hidden;
-      position: relative;
-      animation: slideDown .3s ease both;
-    }
-    .dashboard-card::after {
-      content: '';
-      position: absolute;
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      right: -80px;
-      top: -90px;
-      background: rgba(255,255,255,.08);
-      pointer-events: none;
-    }
-    .dash-top { display:flex; justify-content:space-between; align-items:flex-start; gap:14px; position:relative; z-index:1; }
-    .dash-kicker { font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--g300); margin-bottom:4px; }
-    .dash-top h1 { font-family:var(--ff-d); font-size:23px; line-height:1.08; font-weight:400; letter-spacing:-.02em; color:#fff; }
-    .dash-top p { margin-top:4px; font-size:12px; color:rgba(255,255,255,.68); }
-    .dash-badge { width:44px; height:44px; border-radius:16px; background:rgba(255,255,255,.11); display:grid; place-items:center; font-family:var(--ff-m); font-size:12px; font-weight:700; color:#e8f4ea; border:1px solid rgba(255,255,255,.1); }
-    .dash-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:18px; position:relative; z-index:1; }
-    .dash-stat { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.09); border-radius:18px; padding:10px 8px; min-width:0; }
-    .dash-stat strong { display:block; font-size:16px; line-height:1.1; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .dash-stat span { display:block; margin-top:4px; font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; color:rgba(255,255,255,.58); }
+    /* V2.0 app drawer upgrades */
     .quick-actions { margin: 12px 16px 0; display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
     .quick-action { height:42px; border-radius:999px; border:1px solid var(--line); background:var(--white); color:var(--txt-2); font:inherit; font-size:12px; font-weight:700; box-shadow:var(--sh-sm); cursor:pointer; }
     .quick-action:active { transform:scale(.97); }
@@ -542,32 +511,6 @@
       <div class="user-right">
         <button id="logoutBtn" class="logout-btn" type="button">Logout</button>
         <div class="version-pill">v2.0.0</div>
-      </div>
-    </section>
-
-    <section id="dashboardCard" class="dashboard-card hidden">
-      <div class="dash-top">
-        <div>
-          <div id="greetingText" class="dash-kicker">Good Day</div>
-          <h1 id="dashUserName">MyFarmBox Ops</h1>
-          <p id="dashUserRole">Team workspace</p>
-        </div>
-        <div class="dash-badge">MFB</div>
-      </div>
-
-      <div class="dash-stats">
-        <div class="dash-stat">
-          <strong id="appsCount">0</strong>
-          <span>Apps</span>
-        </div>
-        <div class="dash-stat">
-          <strong id="roleBadge">Team</strong>
-          <span>Access</span>
-        </div>
-        <div class="dash-stat">
-          <strong id="appVersionMini">v2.0</strong>
-          <span>Version</span>
-        </div>
       </div>
     </section>
 
@@ -841,7 +784,6 @@
     const userRole     = document.getElementById("userRole");
     const footerStatus = document.getElementById("footerStatus");
     const installBtn   = document.getElementById("installBtn");
-    const dashboardCard = document.getElementById("dashboardCard");
     const quickActions = document.getElementById("quickActions");
     const bottomNav = document.getElementById("bottomNav");
     const updateBanner = document.getElementById("updateBanner");
@@ -965,12 +907,12 @@
 
     function showLoggedIn(user,buttons){
     loginCard.classList.add("hidden"); userCard.classList.remove("hidden");
-    if (dashboardCard) dashboardCard.classList.remove("hidden");
     if (quickActions) quickActions.classList.remove("hidden");
     if (bottomNav) bottomNav.classList.remove("hidden");
     userName.textContent=user.name||"Team User"; userRole.textContent=user.role||"Access active";
     footerStatus.textContent="Secure session active";
-    renderDashboard(user, buttons || []);
+    updateGreetingLine();
+    updateUserSummary(user, buttons || []);
     const sl=document.getElementById("sectionLabel");
     if(sl) sl.classList.remove("hidden");
     renderButtons(buttons||[]);
@@ -981,7 +923,6 @@
 
     function showLoggedOut(){
       clearAutoLoginTimer(); loginCard.classList.remove("hidden"); userCard.classList.add("hidden");
-      if (dashboardCard) dashboardCard.classList.add("hidden");
       if (quickActions) quickActions.classList.add("hidden");
       if (bottomNav) bottomNav.classList.add("hidden");
       const sl=document.getElementById("sectionLabel"); if(sl) sl.classList.add("hidden");
@@ -1007,22 +948,12 @@
       return "Good Evening";
     }
 
-    function renderDashboard(user, buttons){
-      const name = user.name || "Team User";
+    function updateUserSummary(user, buttons){
       const role = user.role || "Team";
-      const firstName = name.split(" ")[0] || name;
-      const greetingText = document.getElementById("greetingText");
-      const dashUserName = document.getElementById("dashUserName");
-      const dashUserRole = document.getElementById("dashUserRole");
-      const appsCountEl = document.getElementById("appsCount");
-      const roleBadge = document.getElementById("roleBadge");
-      const appVersionMini = document.getElementById("appVersionMini");
-      if (greetingText) greetingText.textContent = getGreeting();
-      if (dashUserName) dashUserName.textContent = firstName;
-      if (dashUserRole) dashUserRole.textContent = role;
-      if (appsCountEl) appsCountEl.textContent = String(normalizeButtons(buttons).length);
-      if (roleBadge) roleBadge.textContent = role.length > 8 ? role.slice(0,8) : role;
-      if (appVersionMini) appVersionMini.textContent = "v" + APP_VERSION;
+      const visibleCount = normalizeButtons(buttons || []).length;
+      const versionEl = document.querySelector(".version-pill");
+      if (versionEl) versionEl.textContent = `${visibleCount} apps · v${APP_VERSION}`;
+      if (userRole) userRole.textContent = role;
     }
 
     function findToolUrlByKeyword(keyword){
