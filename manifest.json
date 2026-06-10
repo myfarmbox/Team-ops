@@ -1,14 +1,13 @@
 {
-  "name": "MyFarmBox Internal App",
-  "short_name": "MyFarmBox Ops",
+  "name": "MyFarmBox Ops",
+  "short_name": "MFB Ops",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#f5f5dc",
-  "theme_color": "#228b22",
-  "description": "MyFarmBox internal operations dashboard for team access and tools",
-  
+  "background_color": "#f6f3ec",
+  "theme_color": "#1c3020",
+  "description": "Premium MyFarmBox internal operations app for team tools, delivery, orders and communication",
   "icons": [
     {
       "src": "logo.png",
